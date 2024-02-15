@@ -3,12 +3,13 @@ const path = require('path')
 const routes = require('./src/routes')
 
 const lti = require('ltijs').Provider
+const Database = require('ltijs-sequelize')
 
+const db = new Database(process.env.DB_INTERNAL_URL)
 // Setup
 lti.setup(process.env.LTI_KEY,
   {
-    url: 'mongodb://' + process.env.DB_HOST + '/' + process.env.DB_NAME + '?authSource=admin',
-    connection: { user: process.env.DB_USER, pass: process.env.DB_PASS }
+    plugin: db // Passing db object to plugin field
   }, {
     staticPath: path.join(__dirname, './public'), // Path to static files
     cookies: {
